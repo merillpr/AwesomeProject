@@ -5,11 +5,11 @@ import {
   Text,
   View,
   TouchableOpacity,
-  TextBase,
 } from "react-native";
 
-export default function FlexboxLayout() {
+export default function FlexboxScreen({ navigation }) {
   const [flexDirection, setFlexDirection] = useState("row");
+  const [isNavigate, setIsNavigate] = useState(false);
 
   return (
     <CustomLayout
@@ -17,6 +17,9 @@ export default function FlexboxLayout() {
       values={["row", "column", "row-reverse", "column-reverse"]}
       selectedValue={flexDirection}
       setSelectedValue={setFlexDirection}
+      isNavigate={isNavigate}
+      setIsNavigate={setIsNavigate}
+      navigation={navigation}
     >
       <View style={[styles.box, { backgroundColor: "red" }]}></View>
       <View style={[styles.box, { backgroundColor: "orange" }]}></View>
@@ -37,11 +40,13 @@ const CustomLayout = ({
   values,
   selectedValue,
   setSelectedValue,
+  isNavigate,
+  setIsNavigate,
+  navigation,
   children,
 }) => (
   <View style={{ padding: 20, flex: 1 }}>
-    <Text style={styles.title}>{title}</Text>
-    <View style={styles.row}>
+    <View style={[styles.row, { flex: 2 }]}>
       {values.map((value) => (
         <TouchableOpacity
           key={value}
@@ -63,9 +68,27 @@ const CustomLayout = ({
       ))}
     </View>
     <View
-      style={[styles.container, { [title]: selectedValue, flexWrap: "wrap" }]}
+      style={[
+        styles.container,
+        { [title]: selectedValue, flexWrap: "wrap", flex: 10 },
+      ]}
     >
       {children}
+    </View>
+    <View style={{ flex: 1 }}>
+      <TouchableOpacity
+        onPress={() => {
+          setIsNavigate(true);
+          navigation.navigate("Fetch");
+        }}
+        style={[styles.button, isNavigate && styles.selectedButton]}
+      >
+        <Text
+          style={[styles.buttonLabel, isNavigate && styles.selectedButtonLabel]}
+        >
+          Go to FetchScreen
+        </Text>
+      </TouchableOpacity>
     </View>
   </View>
 );
@@ -74,8 +97,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "aliceblue",
-    //alignItems: 'center',
-    //justifyContent: 'center',
   },
   box: {
     width: 50,
@@ -102,12 +123,5 @@ const styles = StyleSheet.create({
   },
   selectedButtonLabel: {
     color: "white",
-  },
-  title: {
-    textAlign: "center",
-    fontSize: 24,
-    marginBottom: 18,
-    marginTop: 18,
-    color: "red",
   },
 });

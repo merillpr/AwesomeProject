@@ -8,7 +8,7 @@ import {
   StatusBar,
 } from "react-native";
 
-export default FetchLayout = () => {
+export default FetchScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState("");
 
@@ -29,12 +29,12 @@ export default FetchLayout = () => {
   }, []);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, padding: 20 }}>
       {isLoading ? (
         <ActivityIndicator />
       ) : (
         <FlatList
-          style={{ marginTop: StatusBar.currentHeight, paddingHorizontal: 10 }}
+          style={{ marginTop: StatusBar.currentHeight }}
           data={data}
           keyExtractor={({ id }) => id}
           renderItem={({ item }) => (
