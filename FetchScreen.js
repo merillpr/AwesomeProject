@@ -6,11 +6,14 @@ import {
   View,
   Alert,
   StatusBar,
+  StyleSheet,
+  TouchableHighlight,
 } from "react-native";
 
-export default FetchScreen = ({ navigation }) => {
+export default FetchScreen = ({ navigation, route }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState("");
+  const { pageBeforeName } = route.params;
 
   const getMovies = async () => {
     try {
@@ -30,6 +33,15 @@ export default FetchScreen = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1, padding: 20 }}>
+      <Text>This page is open from {JSON.stringify(pageBeforeName)}</Text>
+      <TouchableHighlight
+        style={styles.button}
+        onPress={() => {
+          navigation.navigate("Flexbox", { defaultButtonState: true });
+        }}
+      >
+        <Text style={styles.buttonLabel}>Back to FlexboxScreen</Text>
+      </TouchableHighlight>
       {isLoading ? (
         <ActivityIndicator />
       ) : (
@@ -47,3 +59,18 @@ export default FetchScreen = ({ navigation }) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  button: {
+    minWidth: "48%",
+    backgroundColor: "oldlace",
+    borderRadius: 5,
+    marginHorizontal: "1%",
+    marginBottom: 5,
+    paddingVertical: 10,
+  },
+  buttonLabel: {
+    color: "coral",
+    textAlign: "center",
+  },
+});

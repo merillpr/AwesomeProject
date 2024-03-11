@@ -1,15 +1,11 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-} from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 
-export default function FlexboxScreen({ navigation }) {
+export default function FlexboxScreen({ navigation, route }) {
   const [flexDirection, setFlexDirection] = useState("row");
   const [isNavigate, setIsNavigate] = useState(false);
+  const { defaultButtonState } = route.params ?? false;
 
   return (
     <CustomLayout
@@ -20,6 +16,7 @@ export default function FlexboxScreen({ navigation }) {
       isNavigate={isNavigate}
       setIsNavigate={setIsNavigate}
       navigation={navigation}
+      defaultButtonState={defaultButtonState}
     >
       <View style={[styles.box, { backgroundColor: "red" }]}></View>
       <View style={[styles.box, { backgroundColor: "orange" }]}></View>
@@ -43,6 +40,7 @@ const CustomLayout = ({
   isNavigate,
   setIsNavigate,
   navigation,
+  defaultButtonState,
   children,
 }) => (
   <View style={{ padding: 20, flex: 1 }}>
@@ -79,12 +77,22 @@ const CustomLayout = ({
       <TouchableOpacity
         onPress={() => {
           setIsNavigate(true);
-          navigation.navigate("Fetch");
+          navigation.navigate("Fetch", { pageBeforeName: "FlexboxScreen" });
         }}
-        style={[styles.button, isNavigate && styles.selectedButton]}
+        style={[
+          styles.button,
+          isNavigate &&
+            !JSON.stringify(defaultButtonState) &&
+            styles.selectedButton,
+        ]}
       >
         <Text
-          style={[styles.buttonLabel, isNavigate && styles.selectedButtonLabel]}
+          style={[
+            styles.buttonLabel,
+            isNavigate &&
+              !JSON.stringify(defaultButtonState) &&
+              styles.selectedButtonLabel,
+          ]}
         >
           Go to FetchScreen
         </Text>
